@@ -1,7 +1,10 @@
 <template>
   <div class="container">
-    <Table :comments="comments" />
-    <Pagination :pages="pages" />
+    <div v-if="comments.length" >
+      <Table :comments="comments" />
+      <Pagination />
+    </div>
+    <Loader v-else />
   </div>
 </template>
 
@@ -12,9 +15,6 @@ export default {
     comments() {
       return this.$store.getters.GET_COMMENTS;
     },
-    pages() {
-      return this.$store.getters.GET_PAGES;
-    },
   },
   mounted() {
     this.$store.dispatch("GET_COMMENTS");
@@ -23,10 +23,10 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 </style>

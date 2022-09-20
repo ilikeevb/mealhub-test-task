@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th @click="sort">
-          id <span v-if="ascendingSort">↓</span><span v-else>↑</span>
+          id <span v-if="ascendingSort">↑</span><span v-else>↓</span>
         </th>
         <th>name</th>
         <th>email</th>
@@ -57,8 +57,9 @@ export default {
 
 <style scoped>
 table {
-  border-spacing: 0;
   max-width: 720px;
+  border-spacing: 0;
+  word-break: break-all;
 }
 
 th,
@@ -86,7 +87,12 @@ tr:last-child td:last-child {
   border-bottom-right-radius: 10px;
 }
 
-tbody tr,
+tbody tr {
+  cursor: pointer;
+}
+th:first-child {
+  white-space: nowrap;
+}
 th:first-child:hover {
   cursor: pointer;
 }

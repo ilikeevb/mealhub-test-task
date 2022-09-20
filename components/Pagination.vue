@@ -3,10 +3,7 @@
     <button @click="previousPage">
       <img src="~/assets/left.svg" />
     </button>
-    <button
-      :class="{ 'active-button': activePage === 1 }"
-      @click="selectPage(1)"
-    >
+    <button :class="{ 'active-button': activePage === 1 }" @click="openPage(1)">
       1
     </button>
     <button v-show="activePage > 5" class="disable-button">
@@ -15,7 +12,7 @@
     <button
       v-for="page in viewPages"
       :key="page"
-      @click="selectPage(page)"
+      @click="openPage(page)"
       :class="{ 'active-button': activePage === page }"
     >
       {{ page }}
@@ -24,7 +21,7 @@
       <img src="~/assets/dots.svg" />
     </button>
     <button
-      @click="selectPage(pages)"
+      @click="openPage(pages)"
       :class="{ 'active-button': activePage === pages }"
     >
       {{ pages }}
@@ -37,7 +34,7 @@
     <button
       v-for="page in pages"
       :key="page"
-      @click="selectPage(page)"
+      @click="openPage(page)"
       :class="{ active: activePage === page }"
     >
       {{ page }}
@@ -48,54 +45,35 @@
 <script>
 export default {
   name: "NuxtPagination",
-  props: {
-    pages: {
-      type: Number,
-      default: 0,
-    },
-  },
-  data() {
-    return {
-      activePage: 1,
-    };
-  },
   computed: {
+    activePage() {
+      return this.$store.getters.GET_ACTIVE_PAGE;
+    },
+    pages() {
+      return this.$store.getters.GET_PAGES;
+    },
     viewPages() {
+      // Создает массив номеров страниц пагинации
       let pages = [];
       if (this.activePage <= 5) {
-        for (let i = 2; i <= 5; i++) {
-          pages.push(i);
-        }
+        for (let i = 2; i <= 5; i++) pages.push(i);
       } else if (this.activePage < this.pages - 4) {
         pages = [this.activePage - 1, this.activePage, this.activePage + 1];
       } else {
-        for (let i = this.pages - 4; i < this.pages; i++) {
-          pages.push(i);
-        }
+        for (let i = this.pages - 4; i < this.pages; i++) pages.push(i);
       }
-
       return pages;
     },
   },
   methods: {
-    openPage() {
-      this.$store.commit("OPEN_PAGE", this.activePage);
-    },
-    selectPage(page) {
-      this.activePage = page;
-      this.openPage();
+    openPage(page) {
+      this.$store.commit("OPEN_PAGE", page);
     },
     previousPage() {
-      if (this.activePage > 1) {
-        this.activePage--;
-        this.openPage();
-      }
+      if (this.activePage > 1) this.openPage(this.activePage - 1);
     },
     nextPage() {
-      if (this.activePage < this.pages) {
-        this.activePage++;
-        this.openPage();
-      }
+      if (this.activePage < this.pages) this.openPage(this.activePage + 1);
     },
   },
 };

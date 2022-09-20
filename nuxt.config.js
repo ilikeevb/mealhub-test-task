@@ -39,10 +39,6 @@ export default {
   build: {
   },
   axios: {
-    // proxyHeaders: false
+    baseURL: 'https://jsonplaceholder.typicode.com/',
   },
-  server: {
-    // удалить server
-    host: "0.0.0.0"
-  }
 }

@@ -1,11 +1,12 @@
 <template>
     <div class="container">
-      <div class="comment">
+      <div v-if="page" class="comment">
         <NuxtLink to="/">На главную</NuxtLink>
-        <p>Пользователь <a>{{ page.comment.email }}</a> оставил комментарий к посту <a>{{page.post.title}}</a></a></p>
-        <h2>{{ page.comment.name }}</h2>
+        <p>Пользователь <a>{{ page.comment.email }}</a> оставил комментарий к посту <a>{{page.post.title}}</a></p>
+        <h3>{{ page.comment.name }}</h3>
         <p>{{ page.comment.body }}</p>
       </div>
+      <Loader v-else />
     </div>
   
 </template>
