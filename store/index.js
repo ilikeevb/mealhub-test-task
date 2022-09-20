@@ -1,29 +1,44 @@
-import comments from "~/comments.json";
-
 export const state = () => ({
-    comments: comments
+    opencomment: { comment: {}, post: {} },
+    comments: [],
+    page: 1,
 })
 
 export const getters = {
-    GET_COMMENT_BY_ID: state => commentId => {
-        return state.comments.find(comment => comment.id === Number(commentId))
+    GET_OPEN_COMMENT: state => {
+        return state.opencomment;
     },
-    SET_COMMENTS: state => comments => {
-        state.comments = comments;
+    GET_COMMENTS: state => {
+        return state.comments.slice((state.page * 10) - 10, state.page * 10)
+    },
+    GET_PAGES: state => {
+        return Math.ceil(state.comments.length / 10)
     }
 }
 
 export const mutations = {
-    increment(state) {
-        state.counter++
+    SET_COMMENTS(state, comments) {
+        state.comments = comments;
+    },
+    SET_COMMENT(state, data) {
+        console.log("SET_COMMENT: ", data)
+        state.opencomment = data;
+    },
+    OPEN_PAGE(state, page) {
+        state.page = page;
     }
 }
 
 export const actions = {
-    GET_COMMENTS: async state => {
-        state;
-        let comments = await this.$axios.$get("https://jsonplaceholder.typicode.com/comments");
-        console.log("comments")
-        console.log("comments: ", comments)
+    async GET_COMMENTS(context) {
+        const comments = await this.$axios.get("https://jsonplaceholder.typicode.com/comments");
+        context.commit('SET_COMMENTS', comments.data);
+    },
+
+    async GET_COMMENT_BY_ID(context, commentId) {
+        const comment = await this.$axios.get(`https://jsonplaceholder.typicode.com/comments?id=${commentId}`);
+        const post = await this.$axios.get(`https://jsonplaceholder.typicode.com/posts/${comment.data[0].postId}`);
+        
+        context.commit('SET_COMMENT', { comment: comment.data[0], post: post.data });
     }
 }

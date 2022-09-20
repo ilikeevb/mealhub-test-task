@@ -33,9 +33,16 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+  axios: {
+    // proxyHeaders: false
+  },
+  server: {
+    // удалить server
+    host: "0.0.0.0"
   }
 }
